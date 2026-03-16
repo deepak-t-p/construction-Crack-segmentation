@@ -27,11 +27,11 @@ infer = "run_inference:main"
 [tool.ruff]
 line-length = 100
 
-[[tool.uv.index]]
-name = "pytorch"
-url = "https://download.pytorch.org/whl/cu124"
-explicit = true
-
-[tool.uv.sources]
-torch = { index = "pytorch" }
-torchvision = { index = "pytorch" }
+# [[tool.uv.index]]
+# name = "pytorch"
+# url = "https://download.pytorch.org/whl/cu124"
+# explicit = true
+# 
+# [tool.uv.sources]
+# torch = { index = "pytorch" }
+# torchvision = { index = "pytorch" }
