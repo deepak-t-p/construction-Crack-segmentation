@@ -152,6 +152,9 @@ postprocess:
   min_component_area: 100
 ```
 
+demo :  https://construction-wall-inspection.streamlit.app/
+
+
 ## 📜 License
 
 This project is for educational and research purposes.
