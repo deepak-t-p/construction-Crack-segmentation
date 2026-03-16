@@ -144,10 +144,19 @@ def load_model_and_processor():
     checkpoint_path = PROJECT_ROOT / "outputs" / "best_model.pt"
     if checkpoint_path.exists():
         model = load_trained_model(str(checkpoint_path), config)
-        model_source = "Fine-tuned checkpoint (`best_model.pt`)"
+        model_source = "Fine-tuned checkpoint (local `best_model.pt`)"
     else:
-        model = build_model(config)
-        model_source = "Pre-trained CLIPSeg (no fine-tuned checkpoint found)"
+        try:
+            from huggingface_hub import hf_hub_download
+            hf_path = hf_hub_download(
+                repo_id="Deepak-TP/drywall-qa-prompted-segmentation", 
+                filename="best_model.pt"
+            )
+            model = load_trained_model(hf_path, config)
+            model_source = "Fine-tuned checkpoint (Hugging Face `Deepak-TP`)"
+        except Exception as e:
+            model = build_model(config)
+            model_source = "Pre-trained CLIPSeg (fallback base model)"
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device).eval()
