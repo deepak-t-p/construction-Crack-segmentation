@@ -1,0 +1,64 @@
+# ──────────────────────────────────────────────
+# Drywall QA Prompted Segmentation — Config
+# ──────────────────────────────────────────────
+
+# ── Model ──
+model:
+  name: "CIDAS/clipseg-rd64-refined"
+  image_size: 352
+  freeze_encoder: false          # fine-tune encoder with low LR instead
+
+# ── Training ──
+training:
+  epochs: 10
+  batch_size: 16
+  encoder_lr: 1.0e-6             # differential LR for CLIP encoder
+  decoder_lr: 1.0e-4             # higher LR for segmentation decoder
+  weight_decay: 0.01
+  scheduler: "cosine"
+  warmup_steps: 100
+  val_interval_steps: 170        # validate every N training steps
+  grad_accumulation_steps: 1
+  seed: 42
+
+# ── Dataset ──
+dataset:
+  # Download from Roboflow in Pascal-VOC format and place here:
+  #   Cracks:         https://universe.roboflow.com/fyp-ny1jt/cracks-3ii36
+  #   Drywall Joints: https://universe.roboflow.com/objectdetect-pu6rn/drywall-join-detect
+  cracks_dir: "data/cracks"
+  joints_dir: "data/drywall-joints"
+  train_split: 0.9
+
+  # Text prompts per category (randomly sampled during training)
+  prompts:
+    crack:
+      - "crack"
+      - "wall crack"
+      - "structural crack"
+      - "surface crack"
+      - "crack on wall"
+      - "concrete crack"
+      - "crack in drywall"
+    joint:
+      - "drywall joint"
+      - "drywall seam"
+      - "taping area"
+      - "wall joint"
+      - "drywall tape joint"
+      - "joint requiring taping"
+      - "seam between drywall panels"
+
+# ── Post-processing ──
+postprocess:
+  threshold: 0.5
+  morph_kernel_size: 5
+  min_component_area: 100        # remove small blobs below this pixel count
+  use_closing: true
+  use_opening: true
+
+# ── Outputs ──
+output:
+  dir: "outputs"
+  save_best_only: true
+  log_file: "training_log.csv"

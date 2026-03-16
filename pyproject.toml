@@ -1,0 +1,37 @@
+[project]
+name = "drywall-qa-segmentation"
+version = "1.0.0"
+description = "Prompted Segmentation for Drywall QA using CLIPSeg"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "transformers>=4.30.0",
+    "Pillow>=10.0.0",
+    "numpy>=1.24.0",
+    "opencv-python>=4.8.0",
+    "matplotlib>=3.7.0",
+    "tqdm>=4.65.0",
+    "pyyaml>=6.0",
+    "streamlit>=1.30.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff"]
+
+[project.scripts]
+train = "train_model:main"
+infer = "run_inference:main"
+
+[tool.ruff]
+line-length = 100
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch" }
+torchvision = { index = "pytorch" }
